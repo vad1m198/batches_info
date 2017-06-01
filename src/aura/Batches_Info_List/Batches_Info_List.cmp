@@ -1,4 +1,4 @@
-<aura:component  controller="Batches_Info_Controller">
+<aura:component controller="Batches_Info_Controller">
 
 	<aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
 	<aura:handler name="removeJobId" event="c:RemoveJobId" action="{!c.removeJobById}"/>
@@ -12,6 +12,11 @@
 	
 	<aura:attribute name="showSpinner" type="Boolean"/>
 	<aura:attribute name="activeJobStatus" type="String" default="Failed"/>
+	<aura:attribute name="pageNumber" type="Integer" default="0"/>
+	
+	
+	<lightning:button label="Previous" onclick="{!c.previous}"/>
+	<lightning:button label="Next" onclick="{!c.next}"/>
 	
 	<aura:if isTrue="{!v.showSpinner}">
 		<lightning:spinner variant="brand" size="large" alternativeText="loading..."/>

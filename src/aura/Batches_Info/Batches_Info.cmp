@@ -1,3 +1,7 @@
 <aura:component implements="force:appHostable">		
 	<c:Batches_Info_List />
+	
+
+
+    
 </aura:component>
