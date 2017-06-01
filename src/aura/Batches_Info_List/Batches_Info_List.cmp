@@ -1,0 +1,57 @@
+<aura:component  controller="Batches_Info_Controller">
+
+	<aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+	<aura:handler name="removeJobId" event="c:RemoveJobId" action="{!c.removeJobById}"/>
+	<aura:handler name="showMessage" event="c:ShowMessage" action="{!c.showMessage}"/>
+	
+	<aura:attribute name="batchInfos" type="AsyncApexJob[]"/>
+	<aura:attribute name="timePeriods" type="String[]"/>
+	
+	<aura:attribute name="messageText" type="String"/>
+	<aura:attribute name="messageSeverity" type="String"/>
+	
+	<aura:attribute name="showSpinner" type="Boolean"/>
+	<aura:attribute name="activeJobStatus" type="String" default="Failed"/>
+	
+	<aura:if isTrue="{!v.showSpinner}">
+		<lightning:spinner variant="brand" size="large" alternativeText="loading..."/>
+	</aura:if>
+	
+	<aura:if isTrue="{!not(empty(v.messageText))}">
+		<ui:message title="{!v.messageSeverity}" severity="{!v.messageSeverity}">
+			{!v.messageText}
+		</ui:message>
+	</aura:if>
+	
+	<div class="select-container">
+		<lightning:select name="selectPeriod" aura:id="selectPeriod" label="Select time period" onchange="{!c.handleTimePeriod}">
+			<aura:iteration items="{!v.timePeriods}" var="t">
+				 <option value="{!t}">{!t}</option>				 
+			</aura:iteration>	        
+	    </lightning:select>
+    </div>   
+    
+	<lightning:tabset selectedTabId="{!v.activeJobStatus}">
+		
+	        <lightning:tab id="Failed" onactive="{!c.onSelectTab}">
+	            <aura:set attribute="label">Failed<lightning:icon iconName="utility:connected_apps" /></aura:set>
+	            <div class="cards-container">
+	            	<aura:iteration items="{!v.batchInfos}" var="b">
+						<c:Batch_Item_Failed batchItem="{!b}"/>
+					</aura:iteration>            
+				</div>
+		     </lightning:tab>
+		        
+	        <lightning:tab id="Processing" onactive="{!c.onSelectTab}">
+	            <aura:set attribute="label">Processing<lightning:icon iconName="utility:connected_apps" /></aura:set>
+       			<div class="cards-container">
+	            	<aura:iteration items="{!v.batchInfos}" var="b">
+						<c:Batch_Item_Processing batchItem="{!b}"/>
+					</aura:iteration>	            
+				</div>
+		    </lightning:tab>
+	         
+	          
+    </lightning:tabset>
+	
+</aura:component>

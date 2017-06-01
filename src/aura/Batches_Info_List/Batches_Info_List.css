@@ -1,0 +1,13 @@
+.THIS.select-container {
+	width: 150px;
+	margin: 10px;
+}
+
+.THIS .cards-container {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+
+
+   
