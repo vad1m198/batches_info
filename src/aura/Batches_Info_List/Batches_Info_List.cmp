@@ -1,4 +1,4 @@
-<aura:component  controller="Batches_Info_Controller">
+<aura:component controller="Batches_Info_Controller">
 
 	<aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
 	<aura:handler name="removeJobId" event="c:RemoveJobId" action="{!c.removeJobById}"/>
@@ -12,6 +12,11 @@
 	
 	<aura:attribute name="showSpinner" type="Boolean"/>
 	<aura:attribute name="activeJobStatus" type="String" default="Failed"/>
+	<aura:attribute name="pageNumber" type="Integer" default="0"/>
+	<aura:attribute name="recordsOnPage" type="Integer" default="10"/>
+	
+	
+
 	
 	<aura:if isTrue="{!v.showSpinner}">
 		<lightning:spinner variant="brand" size="large" alternativeText="loading..."/>
@@ -29,10 +34,9 @@
 				 <option value="{!t}">{!t}</option>				 
 			</aura:iteration>	        
 	    </lightning:select>
-    </div>   
+    </div>
     
 	<lightning:tabset selectedTabId="{!v.activeJobStatus}">
-		
 	        <lightning:tab id="Failed" onactive="{!c.onSelectTab}">
 	            <aura:set attribute="label">Failed<lightning:icon iconName="utility:connected_apps" /></aura:set>
 	            <div class="cards-container">
@@ -40,7 +44,12 @@
 						<c:Batch_Item_Failed batchItem="{!b}"/>
 					</aura:iteration>            
 				</div>
-		     </lightning:tab>
+				
+				<lightning:buttonGroup>
+					<lightning:button label="Previous" onclick="{!c.previous}" disabled="{!v.pageNumber eq 0}"/>
+					<lightning:button label="Next" onclick="{!c.next}" disabled="{!v.batchInfos.length lt v.recordsOnPage}"/>
+				</lightning:buttonGroup>
+		    </lightning:tab>
 		        
 	        <lightning:tab id="Processing" onactive="{!c.onSelectTab}">
 	            <aura:set attribute="label">Processing<lightning:icon iconName="utility:connected_apps" /></aura:set>
@@ -49,9 +58,15 @@
 						<c:Batch_Item_Processing batchItem="{!b}"/>
 					</aura:iteration>	            
 				</div>
+				
+			<lightning:buttonGroup>
+				<lightning:button label="Previous" onclick="{!c.previous}" disabled="{!v.pageNumber eq 0}"/>
+				<lightning:button label="Next" onclick="{!c.next}"  disabled="{!v.batchInfos.length lt v.recordsOnPage}"/>
+			</lightning:buttonGroup>
+				
 		    </lightning:tab>
 	         
-	          
+
     </lightning:tabset>
 	
 </aura:component>

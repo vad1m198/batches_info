@@ -14,11 +14,14 @@ public without sharing class Batches_Info_Controller {
 	}
   
     @AuraEnabled
-    public static List<AsyncApexJob> getBatchesReult(String timePeriod, String jobStatus) {
+    public static List<AsyncApexJob> getBatchesReult(String timePeriod, String jobStatus, Integer pageNumber, Integer recordsNumber) {    	
+    	//without this cast salesforce internal error appear.
+    	pageNumber = Integer.valueOf(pageNumber);
+    	recordsNumber = Integer.valueOf(recordsNumber);
     	
     	String timePeriodLiteral = mapTimePeriodLiteral.get(timePeriod);
     	String jobStatusStr = mapJobStatus.get(jobStatus);
-    	    	
+    	Integer offset = recordsNumber * pageNumber;    	
     	if(jobStatusStr == null) throw new AuraHandledException('Invalid jobStatus parameter: ' + jobStatus);
     	
     	if(timePeriodLiteral == null) throw new AuraHandledException('Invalid time period parameter: ' + timePeriod);
@@ -27,9 +30,9 @@ public without sharing class Batches_Info_Controller {
         		  		  + 'FROM AsyncApexJob '
         		  		  + 'WHERE JobType = \'BatchApex\' '
         		  		  + 'AND Status = :jobStatusStr ';
-				queryStr += 'AND CreatedDate >= ' + timePeriodLiteral;        		  		  
-        		  		 
-        		queryStr+= ' ORDER BY CreatedDate DESC';
+				queryStr += 'AND CreatedDate >= ' + timePeriodLiteral;
+				queryStr += ' ORDER BY CreatedDate DESC'
+						 + ' LIMIT :recordsNumber OFFSET:offset';
         
 	   return Database.query(queryStr);
     }

@@ -2,7 +2,7 @@
 	<aura:attribute name="batchItem" type="AsyncApexJob"/>
 	<aura:registerEvent name="showMessage" type="c:ShowMessage"/>
 	
-	<lightning:card>
+	<lightning:card >
 		<aura:set attribute="title">{!('Class Name: ' + v.batchItem.ApexClass.Name)}</aura:set>
 		<aura:set attribute="actions">
 			<lightning:button label="Rerun" onclick="{!c.rerunBatch}"/>
@@ -15,5 +15,3 @@
         </p>
 	</lightning:card>
 </aura:component>
-
-

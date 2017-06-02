@@ -6,10 +6,12 @@
 		helper.loadTimePeriodsAndInfos(component, component.get("v.activeJobStatus"));
 	},
 	handleTimePeriod: function(component, event, helper) {
+		helper.refreshPageNumber(component);
 		helper.loadBatchInfos(component, component.get("v.activeJobStatus"));
 	},
 	
 	onSelectTab: function(component, event, helper) {
+		helper.refreshPageNumber(component);
 		var selectedJobStatus = event.getSource().get("v.id");
 		component.set("v.activeJobStatus", selectedJobStatus);
 		helper.loadBatchInfos(component, selectedJobStatus);
@@ -22,12 +24,21 @@
 	},
 	
 	showMessage: function(component, event, helper) {
-		component.set("v.messageText", event.getParam("message"));
-		component.set("v.messageSeverity", event.getParam("severity"));
-		window.setTimeout(
-		    $A.getCallback(function() {
-		        component.set("v.messageText", "");
-		    }), 3000
-		);
+		helper.showMessage(component, event.getParam("message"), event.getParam("severity"));
 	},
+	
+	previous: function(component, event, helper) {
+		var n = component.get("v.pageNumber");
+		n = n - 1
+		component.set("v.pageNumber", n);
+		helper.loadBatchInfos(component, component.get("v.activeJobStatus"));
+		
+		
+	},
+	next: function(component, event, helper) {
+		var n = component.get("v.pageNumber");
+		n = n + 1;
+		component.set("v.pageNumber", n);
+		helper.loadBatchInfos(component, component.get("v.activeJobStatus"));
+	}
 })
