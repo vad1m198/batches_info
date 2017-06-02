@@ -24,13 +24,12 @@
 	},
 	
 	showMessage: function(component, event, helper) {
-		helper.showMessage(event.getParam("message"), event.getParam("severity"));
+		helper.showMessage(component, event.getParam("message"), event.getParam("severity"));
 	},
 	
 	previous: function(component, event, helper) {
 		var n = component.get("v.pageNumber");
 		n = n - 1
-		console.log('previous >>> ',n );
 		component.set("v.pageNumber", n);
 		helper.loadBatchInfos(component, component.get("v.activeJobStatus"));
 		
@@ -39,7 +38,6 @@
 	next: function(component, event, helper) {
 		var n = component.get("v.pageNumber");
 		n = n + 1;
-		console.log('next >>> ',n);
 		component.set("v.pageNumber", n);
 		helper.loadBatchInfos(component, component.get("v.activeJobStatus"));
 	}

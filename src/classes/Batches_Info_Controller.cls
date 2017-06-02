@@ -2,7 +2,6 @@ public without sharing class Batches_Info_Controller {
 	
 	private static final Map<String, String> mapTimePeriodLiteral = new Map<String, String>();
 	private static final Map<String, String> mapJobStatus = new Map<String, String>();
-	private static final Integer recordsNumber = 10;
 	
 	static {
 		mapTimePeriodLiteral.put('All', 'LAST_N_YEARS:10');
@@ -15,11 +14,14 @@ public without sharing class Batches_Info_Controller {
 	}
   
     @AuraEnabled
-    public static List<AsyncApexJob> getBatchesReult(String timePeriod, String jobStatus, Long pageNumber) {
+    public static List<AsyncApexJob> getBatchesReult(String timePeriod, String jobStatus, Integer pageNumber, Integer recordsNumber) {    	
+    	//without this cast salesforce internal error appear.
+    	pageNumber = Integer.valueOf(pageNumber);
+    	recordsNumber = Integer.valueOf(recordsNumber);
+    	
     	String timePeriodLiteral = mapTimePeriodLiteral.get(timePeriod);
     	String jobStatusStr = mapJobStatus.get(jobStatus);
-    	Integer offset = recordsNumber * Integer.valueOf(pageNumber);
-    	    	
+    	Integer offset = recordsNumber * pageNumber;    	
     	if(jobStatusStr == null) throw new AuraHandledException('Invalid jobStatus parameter: ' + jobStatus);
     	
     	if(timePeriodLiteral == null) throw new AuraHandledException('Invalid time period parameter: ' + timePeriod);
