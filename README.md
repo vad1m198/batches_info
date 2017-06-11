@@ -10,7 +10,7 @@ Component can be used as lightning tab in lightning experience. Also in source f
  [Demo](https://githubsfdeploy.herokuapp.com/app/githubdeploy/vad1m198/batches_info?ref=master "Direct link")
  
  
- <a href="https://githubsfdeploy.herokuapp.com">
+ <a href="https://githubsfdeploy.herokuapp.com/app/githubdeploy/vad1m198/batches_info?ref=master">
   <img alt="Deploy to Salesforce"
        src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
 </a>
