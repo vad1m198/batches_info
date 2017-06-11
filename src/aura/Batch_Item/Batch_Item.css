@@ -1,7 +1,8 @@
 .THIS {
 	width: 350px;
-	min-width: 300px;
+	display: inline-block;
 	margin: 10px;
+	height: 100%;
 }
 
 .THIS .slds-text-heading--small {	

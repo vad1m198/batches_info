@@ -1,0 +1,41 @@
+<aura:component >	
+	
+	<aura:attribute name="batchItem" type="AsyncApexJob" access="public"/>
+	<aura:attribute name="batchType" type="String" access="public"/>
+	
+	<aura:registerEvent name="rerunBatchByName" type="c:RerunBatchByName"/>
+	<aura:registerEvent name="stopBatchById" type="c:StopBatchById"/>
+	
+	<div>
+		<aura:if isTrue="{!v.batchType == 'Failed'}">
+			<lightning:card title="{!('Class Name: ' + v.batchItem.ApexClass.Name)}">			
+				<aura:set attribute="actions">
+					<lightning:button label="Rerun" onclick="{!c.rerunBatchByName}"/>
+		      	</aura:set>
+				<div><ui:outputText value="{!v.batchType}"/></div>
+				<span class="slds-text-heading--small">Error Message</span>
+		        <p class="slds-p-horizontal--small">{!v.batchItem.ExtendedStatus}</p>
+		        <span class="slds-text-heading--small">Created Date</span>
+		        <p class="slds-p-horizontal--small">
+					<ui:outputDate value="{!v.batchItem.CreatedDate}"  format="MM/dd/yyyy"/>
+		        </p>
+			</lightning:card>
+		</aura:if>
+		
+		<aura:if isTrue="{!v.batchType == 'Processing'}">
+			<lightning:card title="{!('Class Name: ' + v.batchItem.ApexClass.Name)}">			
+				<aura:set attribute="actions">
+					<lightning:button label="Stop" onclick="{!c.stopBatchById}"/>
+		        </aura:set>
+		        <span class="slds-text-heading--small">Processed %</span>	
+		        <p class="slds-p-horizontal--small">
+		        	<ui:outputNumber value="{!(v.batchItem.JobItemsProcessed / v.batchItem.TotalJobItems * 100)}" format="0.00"/>
+		        </p>
+		        <span class="slds-text-heading--small">Created Date</span>
+		        <p class="slds-p-horizontal--small">
+					<ui:outputDate value="{!v.batchItem.CreatedDate}"  format="MM/dd/yyyy"/>
+		        </p>
+			</lightning:card>
+		</aura:if>
+	</div>	
+</aura:component>

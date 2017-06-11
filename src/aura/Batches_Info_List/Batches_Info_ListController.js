@@ -1,44 +1,20 @@
 ({
-	myAction : function(component, event, helper) {
-		
-	},
-	doInit: function(component, event, helper) {
-		helper.loadTimePeriodsAndInfos(component, component.get("v.activeJobStatus"));
-	},
-	handleTimePeriod: function(component, event, helper) {
-		helper.refreshPageNumber(component);
-		helper.loadBatchInfos(component, component.get("v.activeJobStatus"));
+	doInit: function(oCmp, oEvent, oHelper) {		
+		oHelper.loadData(oCmp);
 	},
 	
-	onSelectTab: function(component, event, helper) {
-		helper.refreshPageNumber(component);
-		var selectedJobStatus = event.getSource().get("v.id");
-		component.set("v.activeJobStatus", selectedJobStatus);
-		helper.loadBatchInfos(component, selectedJobStatus);
+	handlePeriodChange: function(oCmp, oEvent, oHelper) {
+		oCmp.set("v._pageNumber", 0);
+		oHelper.loadData(oCmp);
 	},
 	
-	removeJobById: function(component, event, helper) {
-		var jobIdToRemove = event.getParam("jobId")
-		var jobs = component.get("v.batchInfos");		
-		component.set("v.batchInfos", jobs.filter(obj => obj.Id != jobIdToRemove));
+	previous: function(oCmp, oEvent, oHelper) {
+		oCmp.set("v._pageNumber", oCmp.get("v._pageNumber") - 1);
+		oHelper.loadData(oCmp);
 	},
 	
-	showMessage: function(component, event, helper) {
-		helper.showMessage(component, event.getParam("message"), event.getParam("severity"));
-	},
-	
-	previous: function(component, event, helper) {
-		var n = component.get("v.pageNumber");
-		n = n - 1
-		component.set("v.pageNumber", n);
-		helper.loadBatchInfos(component, component.get("v.activeJobStatus"));
-		
-		
-	},
-	next: function(component, event, helper) {
-		var n = component.get("v.pageNumber");
-		n = n + 1;
-		component.set("v.pageNumber", n);
-		helper.loadBatchInfos(component, component.get("v.activeJobStatus"));
+	next: function(oCmp, oEvent, oHelper) {
+		oCmp.set("v._pageNumber", oCmp.get("v._pageNumber") + 1);
+		oHelper.loadData(oCmp);
 	}
 })

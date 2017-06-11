@@ -1,6 +1,40 @@
-<aura:component implements="force:appHostable">		
-	<c:Batches_Info_List />
+<aura:component implements="force:appHostable" controller="Batches_Info_Controller">
+
+	<aura:attribute name="_messageText" type="String" access="private" default=""/>
+	<aura:attribute name="_messageSeverity" type="String" access="private" default="info"/>
+	<aura:attribute name="_showSpinner" type="Boolean" access="private" default="true"/>
+	<aura:attribute name="_activeJobStatus" type="String" access="private" default="Failed"/>
 	
+	<aura:attribute name="timePeriods" type="String[]" access="public"/>
+	<aura:attribute name="failedBatchInfos" type="AsyncApexJob[]" access="public"/>
+	<aura:attribute name="processingBatchInfos" type="AsyncApexJob[]" access="public"/>
+	
+	<aura:handler name="loadBatchesData" event="c:LoadBatchesData" action="{!c.loadBatches}"/>
+	<aura:handler name="rerunBatchByName" event="c:RerunBatchByName" action="{!c.rerunBatch}"/>
+	<aura:handler name="stopBatchById" event="c:StopBatchById" action="{!c.stopBatch}"/>
+	
+	<div>
+		<aura:if isTrue="{!v._showSpinner}">
+			<lightning:spinner variant="brand" size="large" alternativeText="loading..."/>
+		</aura:if>
+		
+		<aura:if isTrue="{!not(empty(v._messageText))}">
+			<ui:message title="{!v._messageSeverity}" severity="{!v._messageSeverity}">
+				{!v._messageText}
+			</ui:message>
+		</aura:if>
+		
+		<lightning:tabset selectedTabId="Failed">
+			<lightning:tab id="Failed">
+				<aura:set attribute="label">Failed<lightning:icon iconName="utility:connected_apps" /></aura:set>
+				<c:Batches_Info_List batchType="Failed" batchInfos="{!v.failedBatchInfos}" timePeriods="{!v.timePeriods}"/>
+			</lightning:tab>
+			<lightning:tab id="Processing">
+				<aura:set attribute="label">Processing<lightning:icon iconName="utility:connected_apps" /></aura:set>
+				<c:Batches_Info_List batchType="Processing" batchInfos="{!v.processingBatchInfos}" timePeriods="{!v.timePeriods}"/>
+			</lightning:tab>
+		</lightning:tabset>
+	</div>
 
 
     

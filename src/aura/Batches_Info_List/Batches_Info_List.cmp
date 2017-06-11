@@ -1,72 +1,37 @@
 <aura:component controller="Batches_Info_Controller">
 
-	<aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
-	<aura:handler name="removeJobId" event="c:RemoveJobId" action="{!c.removeJobById}"/>
-	<aura:handler name="showMessage" event="c:ShowMessage" action="{!c.showMessage}"/>
+	<aura:handler name="init" action="{!c.doInit}" value="{!this}"/>	
 	
-	<aura:attribute name="batchInfos" type="AsyncApexJob[]"/>
-	<aura:attribute name="timePeriods" type="String[]"/>
+	<aura:attribute name="_pageNumber" type="Integer" default="0" access="private"/>
+	<aura:attribute name="_recordsOnPage" type="Integer" default="10" access="private"/>
 	
-	<aura:attribute name="messageText" type="String"/>
-	<aura:attribute name="messageSeverity" type="String"/>
+	<aura:attribute name="batchType" type="String" access="public"/>
+	<aura:attribute name="batchInfos" type="AsyncApexJob[]" access="public"/>
+	<aura:attribute name="timePeriods" type="String[]" access="public"/>
 	
-	<aura:attribute name="showSpinner" type="Boolean"/>
-	<aura:attribute name="activeJobStatus" type="String" default="Failed"/>
-	<aura:attribute name="pageNumber" type="Integer" default="0"/>
-	<aura:attribute name="recordsOnPage" type="Integer" default="10"/>
+	<aura:registerEvent name="loadBatchesData" type="c:LoadBatchesData"/>
 	
-	
-
-	
-	<aura:if isTrue="{!v.showSpinner}">
-		<lightning:spinner variant="brand" size="large" alternativeText="loading..."/>
-	</aura:if>
-	
-	<aura:if isTrue="{!not(empty(v.messageText))}">
-		<ui:message title="{!v.messageSeverity}" severity="{!v.messageSeverity}">
-			{!v.messageText}
-		</ui:message>
-	</aura:if>
-	
-	<div class="select-container">
-		<lightning:select name="selectPeriod" aura:id="selectPeriod" label="Select time period" onchange="{!c.handleTimePeriod}">
-			<aura:iteration items="{!v.timePeriods}" var="t">
-				 <option value="{!t}">{!t}</option>				 
-			</aura:iteration>	        
-	    </lightning:select>
-    </div>
-    
-	<lightning:tabset selectedTabId="{!v.activeJobStatus}">
-	        <lightning:tab id="Failed" onactive="{!c.onSelectTab}">
-	            <aura:set attribute="label">Failed<lightning:icon iconName="utility:connected_apps" /></aura:set>
-	            <div class="cards-container">
-	            	<aura:iteration items="{!v.batchInfos}" var="b">
-						<c:Batch_Item_Failed batchItem="{!b}"/>
-					</aura:iteration>            
-				</div>
-				
-				<lightning:buttonGroup>
-					<lightning:button label="Previous" onclick="{!c.previous}" disabled="{!v.pageNumber eq 0}"/>
-					<lightning:button label="Next" onclick="{!c.next}" disabled="{!v.batchInfos.length lt v.recordsOnPage}"/>
-				</lightning:buttonGroup>
-		    </lightning:tab>
-		        
-	        <lightning:tab id="Processing" onactive="{!c.onSelectTab}">
-	            <aura:set attribute="label">Processing<lightning:icon iconName="utility:connected_apps" /></aura:set>
-       			<div class="cards-container">
-	            	<aura:iteration items="{!v.batchInfos}" var="b">
-						<c:Batch_Item_Processing batchItem="{!b}"/>
-					</aura:iteration>	            
-				</div>
-				
-			<lightning:buttonGroup>
-				<lightning:button label="Previous" onclick="{!c.previous}" disabled="{!v.pageNumber eq 0}"/>
-				<lightning:button label="Next" onclick="{!c.next}"  disabled="{!v.batchInfos.length lt v.recordsOnPage}"/>
+	<div>
+		<div class="timeperiod-pagination-container">
+			<div class="select-container">
+				<lightning:select name="selectPeriod" aura:id="selectPeriod" label="Select time period" onchange="{!c.handlePeriodChange}">			
+					<option value="LAST_N_YEARS:10">All</option>
+					<option value="TODAY">Today</option>
+					<option value="LAST_WEEK">Last Week</option>
+					<option value="LAST_MONTH">Last Month</option>
+				</lightning:select>
+			</div>
+			<lightning:buttonGroup class="pagination-container">
+				<lightning:button label="Previous" onclick="{!c.previous}" disabled="{!v._pageNumber eq 0}"/>
+				<lightning:button label="Next" onclick="{!c.next}"  disabled="{!v.batchInfos.length lt v._recordsOnPage}"/>
 			</lightning:buttonGroup>
-				
-		    </lightning:tab>
-	         
-
-    </lightning:tabset>
-	
+		</div>
+		<div class="cards-container">
+			<aura:iteration items="{!v.batchInfos}" var="b">		
+				<c:Batch_Item batchType="{!v.batchType}" batchItem="{!b}"/>		
+			</aura:iteration>
+			
+			<aura:if isTrue="{!v.batchInfos.length == 0}">No batches were found</aura:if>
+		</div>
+	</div>		
 </aura:component>

@@ -1,6 +1,14 @@
-.THIS.select-container {
+.THIS .select-container {
 	width: 150px;
 	margin: 10px;
+}
+
+.THIS .timeperiod-pagination-container {
+	display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .THIS .cards-container {

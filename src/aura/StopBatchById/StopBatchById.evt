@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT">
+    <aura:attribute name="batchId" type="String"/>
+</aura:event>
