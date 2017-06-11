@@ -7,7 +7,7 @@ Second component tab shows information about bathces in progress (class name, pr
 Component can be used as lightning tab in lightning experience. Also in source files visualforce page to use in salesforce classic experience.
  
 
- [Demo](https://githubsfdeploy.herokuapp.com/app/githubdeploy/vad1m198/apex-mdapi/batches_info "Direct link")
+ [Demo](https://githubsfdeploy.herokuapp.com/app/githubdeploy/vad1m198/batches_info?ref=master "Direct link")
  
  
  
